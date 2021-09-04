@@ -1,17 +1,15 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { from, map, Observable, switchMap } from 'rxjs';
+import { Injectable } from '@nestjs/common';
 import { AuthService } from 'src/auth/services/auth/auth.service';
 import { Repository } from 'typeorm';
 import { LoginUserDto } from './dto/loginUser.dto';
 import { UserDto } from './dto/user.dto';
 import { User } from './entities/user.entity';
-import { UserI } from './user.interface';
-import { Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PlaceParkingDto } from 'src/place-parking/dto/place-parking.dto';
+import { PlaceParking } from 'src/place-parking/entities/place-parking.entity';
 
 @Injectable()
 export class UserService {
-  private readonly logger = new Logger(UserService.name);
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
@@ -20,26 +18,13 @@ export class UserService {
   ) {}
 
   create(createUserDto: UserDto): Promise<User> {
+    createUserDto.password=this.authService.hashPassword(createUserDto.password);
     return this.userRepository.save(createUserDto);
   }
 
-  // login(loginUserDto: LoginUserDto): Observable<string> {
-  //   return this.findByName(loginUserDto.name).pipe(
-  //     switchMap((user: UserI) => this.validatePassword(loginUserDto.password, user.password).pipe(
-  //       map((passwordsMatches: boolean) => {
-  //         if(passwordsMatches){
-  //           return 'Login successfull'
-  //         } else {
-  //           throw new HttpException('Login failed', HttpStatus.UNAUTHORIZED)
-  //         }
-  //       })
-  //     ))
-  //   )
-  // }
-
   async login(loginUserDto: LoginUserDto): Promise<any>{
     const user = await this.userService.findOne(loginUserDto.name);
-    if(user && user.password == loginUserDto.password){
+    if(this.validateUser(loginUserDto.name, loginUserDto.password)){
       const { password, ...result } = user;
       return result;
     }
@@ -50,23 +35,37 @@ export class UserService {
     return this.userRepository.find();
   }
 
-  findOne(id: string): Promise<User> {
-    return this.userRepository.findOne(id);
+  async findOne(name: string): Promise<User> {
+    return this.userRepository.findOne({name});
   }
 
-  async update(id: string, updateUserDto: UserDto): Promise<void> {
-    await this.userRepository.update(id, updateUserDto);
+  async update(name: string, updateUserDto: UserDto): Promise<void> {
+    await this.userRepository.update({name}, updateUserDto);
   }
 
-  async remove(id: string): Promise<void> {
-    await this.userRepository.delete(id);
+  async remove(name: string): Promise<void> {
+    await this.userRepository.delete({name});
   }
 
-  private validatePassword(password: string, storedPasswordHash: string): Observable<boolean> {
-    return this.authService.comparePassword(password, storedPasswordHash)
+  private validateUser(name: string, password: string): Promise<boolean> {
+    return this.authService.validateUser(name, password);
   }
 
-  private findByName(name: string): Observable<UserI> {
-    return from(this.userRepository.findOne({name}, {select: ['id', 'name', 'password', 'isAdmin']}));
+  async findByName(name: string): Promise<User> {
+    return this.userRepository.findOne({name});
+  }
+
+  async assignPlace(userDto: UserDto, placeParkingDto: PlaceParkingDto): Promise<void>{
+    userDto.placeParking = placeParkingDto;
+    await this.userRepository.update(userDto.name, userDto);
+  }
+
+  async unassignPlace(userDto: UserDto): Promise<void> {
+    userDto.placeParking = null;
+    await this.userRepository.update(userDto.name, userDto);
+  }
+
+  async findPlace(userDto: UserDto): Promise<PlaceParkingDto> {
+    return userDto.placeParking;
   }
 }

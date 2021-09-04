@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { PlaceParking } from "src/place-parking/entities/place-parking.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -14,4 +15,8 @@ export class User {
 
     @Column({default: false})
     isAdmin: boolean;
+
+
+    @ManyToOne(type => PlaceParking, placeParking => placeParking.num, {})
+    placeParking: PlaceParking;
 }

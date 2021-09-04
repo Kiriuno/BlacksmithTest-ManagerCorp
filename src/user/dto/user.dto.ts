@@ -1,4 +1,5 @@
-import { IsNumber, IsString, IsBoolean } from "class-validator";
+import { IsString, IsBoolean } from "class-validator";
+import { PlaceParking } from "src/place-parking/entities/place-parking.entity";
 
 export class UserDto {
 
@@ -10,4 +11,6 @@ export class UserDto {
 
     @IsBoolean()
     isAdmin: boolean;
+
+    placeParking: PlaceParking;
 }
