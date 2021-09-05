@@ -1,24 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, SetMetadata, Logger, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDto } from './dto/user.dto';
 import { User } from './entities/user.entity';
 import { PlaceParkingDto } from 'src/place-parking/dto/place-parking.dto';
 import { PlaceParking } from 'src/place-parking/entities/place-parking.entity';
-import { AuthGuard } from '@nestjs/passport';
-
-export const IS_PUBLIC_KEY = 'isPublic';
-export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
-
+import { Public } from 'src/app.controller';
 
 @Controller('user')
 export class UserController {
-  private readonly logger = new Logger(UserController.name);
   constructor(private readonly userService: UserService) {}
 
   @Public()
-  @Post('/register')
+  @Post('register')
   async create(@Body() userDto: UserDto): Promise<User> {
-    this.logger.log(userDto);
     return this.userService.create(userDto);
   }
 

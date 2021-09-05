@@ -27,18 +27,16 @@ export class AuthService extends PassportStrategy(Strategy){
     async validateUser(name: string, passwordEntered: string): Promise<any> {
         const user = await this.userService.findByName(name);
         if (this.comparePassword(user.password, passwordEntered)) {
-          const { password, ...result } = user;
+            const { password, ...result } = user;
           return result;
         }
         return null;
     }
 
     async login(user: any) {
-        if(this.validateUser(user.name, user.password)){
-            const payload = { name: user.name, sub: user.id };
-            return {
-                access_token: this.jwtService.sign(payload),
-            }; 
-        }
+        const payload = { name: user.name, sub: user.id };
+        return {
+            access_token: this.jwtService.sign(payload),
+        }; 
     }
 }

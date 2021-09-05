@@ -7,6 +7,7 @@ import { jwtConstants } from "./constants";
 import { JwtAuthGuard } from "./jwt-auth-guard";
 import { JwtStrategy } from "./jwt.strategy";
 import { LocalAuthGuard } from "./local-auth.guard";
+import { LocalStrategy } from "./local.strategy";
 import { AuthService } from './services/auth/auth.service';
 
 @Module({
@@ -18,7 +19,8 @@ import { AuthService } from './services/auth/auth.service';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard
-    }
+    },
+    LocalStrategy
   ],
   exports: [AuthService],
   imports: [
