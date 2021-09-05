@@ -16,7 +16,7 @@ export class PlaceParkingController {
   }
 
   @Get()
-  findFree(): Observable<PlaceParkingI> {
-    return this.placeParkingService.findFree();
+  findFree(@Body() etage: number): Observable<PlaceParkingI> {
+    return this.placeParkingService.findFree(etage);
   }
 }

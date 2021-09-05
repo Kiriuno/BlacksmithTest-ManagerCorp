@@ -1,20 +1,16 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PassportStrategy } from '@nestjs/passport';
-import { Strategy } from 'passport-local';
 import { from, Observable } from 'rxjs';
 import { UserService } from 'src/user/user.service';
 const bcrypt = require('bcrypt');
 
 @Injectable()
-export class AuthService extends PassportStrategy(Strategy){
+export class AuthService{
     constructor(
         @Inject(forwardRef(() => UserService))
         private userService: UserService,
         private jwtService: JwtService,
-    ) {
-        super();
-    }
+    ) {}
 
     hashPassword(password: string): string{
         return bcrypt.hash(password, 12);

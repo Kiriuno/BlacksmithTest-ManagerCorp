@@ -22,6 +22,18 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
+## Test Technique
+
+```
+- Création du système du CRUD utilisateur: OK
+- Création du système de création des place de parking: OK
+- Création du système d'assignement/désassignement d'une place de parking a un utilisateur: OK
+- Création du système de recherche d'une place libre par étage: OK
+- Création du système de recherche de la place de l'utilisateur: OK
+- Gestion de l'authentification : KO
+```
+
+
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.

@@ -22,8 +22,8 @@ export class PlaceParkingService {
     }
   }
 
-  findFree(): Observable<PlaceParkingI> {
+  findFree(etage: number): Observable<PlaceParkingI> {
     const disponible = true;
-    return from(this.placeParkingRepository.findOne({disponible}, {select: ['num', 'etage', 'disponible', 'tpsOccupation', 'user']}));
+    return from(this.placeParkingRepository.findOne({etage, disponible}, {select: ['num', 'etage', 'disponible', 'tpsOccupation', 'user']}));
   }
 }
