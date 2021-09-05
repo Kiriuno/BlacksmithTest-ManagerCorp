@@ -10,8 +10,8 @@ import { PlaceParkingModule } from 'src/place-parking/place-parking.module';
   controllers: [UserController],
   providers: [UserService],
   imports: [
-    forwardRef(() => AuthModule),
     TypeOrmModule.forFeature([User]),
+    forwardRef(() => AuthModule),
     PlaceParkingModule
   ],
   exports: [UserService]

@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/user/entities/user.entity";
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class PlaceParking {
@@ -14,4 +15,7 @@ export class PlaceParking {
 
     @Column({default: 0})
     tpsOccupation: number;
+
+    @OneToOne(type => User, user => user.placeParking)
+    user: User;
 }

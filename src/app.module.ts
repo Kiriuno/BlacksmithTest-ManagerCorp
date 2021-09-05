@@ -13,7 +13,20 @@ import { TypeOrmModule } from '@nestjs/typeorm'
     UserModule,
     PlaceParkingModule,
     AuthModule,
-    TypeOrmModule.forRoot()
+    TypeOrmModule.forRoot({
+      type: "mysql",
+      host: "localhost",
+      port: 3306,
+      username: "root",
+      password: "password",
+      database: "ParkmanagerCorpGestionParking",
+      autoLoadEntities: true,
+      synchronize: true,
+      migrations: [__dirname + '/migrations/*{.ts,.js}'],
+      cli: {
+        migrationsDir: __dirname + '/migrations'
+      }
+  })
   ],
   controllers: [AppController],
   providers: [AppService],

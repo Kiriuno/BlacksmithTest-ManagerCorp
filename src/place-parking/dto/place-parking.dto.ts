@@ -1,4 +1,5 @@
 import { IsNumber, IsBoolean } from "class-validator";
+import { User } from "src/user/entities/user.entity";
 
 export class PlaceParkingDto {
 
@@ -13,4 +14,6 @@ export class PlaceParkingDto {
 
     @IsNumber()
     tpsOccupation: number;
+
+    user: User;
 }
